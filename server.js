@@ -6,12 +6,23 @@
 const express = require("express");
 const app = express();
 
+let userdb = null;
+
 // our default array of dreams
 const dreams = [
   "Find and count some sheep",
   "Climb a really tall mountain",
   "Wash the dishes"
 ];
+
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://dbUser:dbPassword@cluster0.ui701.mongodb.net/<dbname>?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+client.connect(err => {
+  userdb = client.db("a3").collection("users");
+  // perform actions on the collection object
+});
+
 
 // make all the files in 'public' available
 // https://expressjs.com/en/starter/static-files.html
