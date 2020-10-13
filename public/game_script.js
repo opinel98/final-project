@@ -1,18 +1,4 @@
-// client-side js, loaded by index.html
-// run by the browser each time the page is loaded
 
-console.log("hello world :o");
-
-// define variables that reference elements on our page
-const dreamsList = document.getElementById("dreams");
-const dreamsForm = document.querySelector("form");
-
-// a helper function that creates a list item for a given dream
-function appendNewDream(dream) {
-  const newListItem = document.createElement("li");
-  newListItem.innerText = dream;
-  dreamsList.appendChild(newListItem);
-}
 
 var context = null;
 
@@ -275,32 +261,152 @@ function drawMenu(){
             ctx.fillStyle = '#000099';
         }
 
-        difficulties[d]
+        difficulties[d].menuBox = [y - 20, y + 10];
+        ctx.fillText(difficulties[d].name, 150, y);
+        y += 80;
+
+        if(mouseOver) {
+            ctx.fillStyle ='#000000';
+        }
+    }
+    var y = 120;
+    ctx.font = 'italic 12pt sans-serif';
+
+    for(var d in difficulties){
+        if(difficulties[d].bestTime == 0){
+            ctx.fillText('No best time', 150, y);
+        }
+        else{
+            var t = difficulties[d].bestTime;
+            var bestTime = '';
+            if((t/1000) >= 60){
+                bestTime = Math.floor((t/1000) / 60) + ':';
+                t = t % (60000);
+            }
+            bestTime += Math.floor(t/1000) + '.' + (t%1000);
+            ctx.fillText('Best time  ' + bestTime, 150, y);
+        }
+        y+=80;
     }
 };
 
-// fetch the initial list of dreams
-fetch("/dreams")
-  .then(response => response.json()) // parse the JSON from the server
-  .then(dreams => {
-    // remove the loading text
-    dreamsList.firstElementChild.remove();
-  
-    // iterate through every dream and add it to our page
-    dreams.forEach(appendNewDream);
-  
-    // listen for the form to be submitted and add a new dream when it is
-    dreamsForm.addEventListener("submit", event => {
-      // stop our form submission from refreshing the page
-      event.preventDefault();
+function drawPlaying(){
+    var halfW = gameState.tileW / 2;
+    var halfH = gameState.tileH / 2;
 
-      // get dream value and add it to the list
-      let newDream = dreamsForm.elements.dream.value;
-      dreams.push(newDream);
-      appendNewDream(newDream);
+    var cDiff = difficulties[gameState.difficulty];
 
-      // reset form
-      dreamsForm.reset();
-      dreamsForm.elements.dream.focus();
-    });
-  });
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+
+    ctx.fillStyle = '#000000';
+    ctx.font = '12ptx sans-serif';
+    ctx.fillText(cDiff.name, 150, 390);
+
+    if(gameState.screen != 'lost'){
+        ctx.textAlign = 'left';
+        ctx.fillText('Mines: ' + cDiff.mines, 10, 40);
+
+        var whichT = (gameState.screen == 'won' ? gameState.timeTaken : gameTime);
+        var t = '';
+        if((gameTime / 1000) > 60){
+            t = Math.floor((whichT / 1000) / 60) + ':';
+        }
+        var s = Math.floor((whichT / 1000) % 60);
+        t += (s > 9 ? s : '0' + s);
+
+        ctx.textAlign = 'right';
+        ctx.fillText('Time: ' + t, 290, 40);
+    }
+    if(gameState.screen == 'lost' || gameState.screen == 'won'){
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 20px sans-serif';
+        ctx.fillText(
+            (gameState.screen == 'lost' ? 'Game Over' : 'Cleared!'), 150, offsetY - 15);
+    }
+
+    ctx.strokeStyle = '999999';
+    ctx.strokeRect(offsetX, offsetY,
+        (cDiff.width * gameState.tileW),
+        (cDiff.height * gameState.tileH));
+
+    ctx.font = 'bold 10px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    for(var i in grid){
+        var px = offsetX + (grid[i].x * gameState.tileW);
+        var py = offsetY + (grid[i].y * gameState.tileH);
+
+        if(gameState.screen == 'lost' && grid[i].hasMine){
+            ctx.fillStyle = '#ff0000';
+            ctx.fillRect(px, py, gameState.tileW,gameState.tileH);
+            ctx.fillStyle = '#000000';
+            ctx.fillText('x', px + halfW, py + halfH);
+        }
+        else if(grid[i].currentState == 'visible'){
+            ctx.fillStyle = '#dddddd';
+
+            if(grid[i].danger){
+                ctx.fillStyle = '#000000';
+                ctx.fillText(grid[i].danger, px + halfW, py + halfH);
+            }
+        }
+        else{
+            ctx.fillStyle = '#cccccc';
+            ctx.fillRect(px, py, gameState.tileW, gameState.tileH);
+            ctx.strokeRect(px, py, gameState.tileW, gameState.tileH);
+
+            if(grid[i].currentState == 'flagged'){
+                ctx.fillStyle = '#0000cc';
+                ctx.fillText('p', px + halfW, py + halfH);
+            }
+        }
+    }
+};
+
+function drawGame()
+{
+    if(ctx == null){return;}
+
+    var currentFrameTime = Date.now();
+    if(lastFrameTime ==0){lastFrameTime = currentFrameTime;}
+    var timeElapsed = currentFrameTime - lastFrameTime;
+    gameTime += timeElapsed;
+
+    updateGame();
+    var sec = Math.floor(Date.now()/1000);
+    if(sec!=currentSecond)
+    {
+        currentSecond = sec;
+        framesLastSecond = frameCount;
+        frameCount = 1;
+    }
+    else{frameCount++;}
+    ctx.fillStyle = "#ddddee";
+    ctx.fillRect(0,0,300,400);
+
+    if(gameState.screen == 'menu'){drawMenu();}
+    else{drawPlaying();}
+
+    ctx.textAlign = "left";
+    ctx.font = "10pt sans-serif";
+    ctx.fillStyle = "000000";
+    ctx.fillText("Frames:" + framesLastSecond,5,15);
+
+    lastFrameTime = currentFrameTime;
+
+    requestAnimationFrame(drawGame);
+};
+
+function realPos(x,y){
+    var p = document.getElementById('game');
+    do{
+        x -= p.offsetLeft;
+        y -= p.offsetTop;
+
+        p = p.offsetParent;
+    }while(p!= null);
+
+    return[x,y];
+};
