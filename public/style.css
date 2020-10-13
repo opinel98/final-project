@@ -54,3 +54,8 @@ footer {
   padding-top: 1.5em;
   border-top: 1px solid lightgrey;
 }
+canvas{
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+}
