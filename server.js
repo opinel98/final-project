@@ -8,12 +8,6 @@ const app = express();
 
 let userdb = null;
 
-// our default array of dreams
-const dreams = [
-  "Find and count some sheep",
-  "Climb a really tall mountain",
-  "Wash the dishes"
-];
 
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://dbUser:dbPassword@cluster0.ui701.mongodb.net/<dbname>?retryWrites=true&w=majority";
