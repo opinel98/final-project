@@ -35,7 +35,7 @@ app.set('views',__dirname + '/views');
 
 let online = null;
 let userdb = null;
-let online = "";
+
 online = "Joe";
 
 const MongoClient = require('mongodb').MongoClient;
@@ -54,7 +54,7 @@ app.use(express.static("public"));
 
 // https://expressjs.com/en/starter/basic-routing.html
 app.get("/", (request, response) => {
-  response.sendFile(__dirname + "/views/game.html");
+  response.sendFile(__dirname + "/views/player_lobby.html");
 });
 
 
@@ -63,6 +63,18 @@ app.get("/", (request, response) => {
 let io = socket.listen(server);
 io.sockets.on('connection', function () {
   console.log('hello world im a hot socket');
+});
+
+io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' }); // This will emit the event to all connected sockets
+
+io.on('connection', (socket) => {
+  socket.broadcast.emit('hi');
+});
+
+io.on('connection', (socket) => {
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });
 });
 
 app.get("/", (request, response) => {
@@ -119,8 +131,11 @@ app.get("/login", (request,response)=>{
 })
 
 
+
+
+
+
 // listen for requests :)
 server.listen(3000,() => {
   console.log('listening on *:3000');
 });
-
