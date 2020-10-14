@@ -6,10 +6,9 @@
 const express = require("express");
 const ejs = require('ejs');
 const app = express();
-const server = require('http').server(app);
-let io = require('socket.io')(server);
-
-
+//
+var socket = require('socket.io');
+const server = require('http').Server(app);
 app.set('view engine', 'ejs');
 
 let userdb = null;
@@ -23,6 +22,7 @@ client.connect(err => {
   userdb = client.db("a3").collection("users");
   // perform actions on the collection object
 });
+
 
 
 // make all the files in 'public' available
@@ -42,14 +42,13 @@ app.get("/dreams", (request, response) => {
 });
 
 // set up socket io for the chat room
-
-
 let io = socket.listen(server);
 io.sockets.on('connection', function () {
   console.log('hello world im a hot socket');
 });
 
 // listen for requests :)
-app.listen(3000,() => {
+server.listen(3000,() => {
   console.log('listening on *:3000');
 });
+
