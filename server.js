@@ -43,42 +43,51 @@ app.get("/", (request, response) => {
 });
 
 app.get("/", (request, response) => {
+  console.log("in login")
   response.redirect("/login")
 });
 
+app.post("/login" ,async(request,response) => {
+  try{
+    let uin = request.body.id;
+    let pin = request.body.password;
+    console.log(uin)
+    console.log(pin)
+    //check a user with that uname exist- username are unique
+    userdb.count({id: uin}).then(r =>{
+      if(r > 0) {
+        console.log(r)
+        userdb.find({id: uin, password: pin}).toArray().then(res => {
+          if (res[0]) {
+            console.log("Autenticated")
+            response.redirect("/");
+            online = uin;
+
+          } else {
+            let m = "Fail"
+            console.log(m)
+            response.redirect("/login");
+          }
+        })
+      }
+      else{
+          let newUser = {id: uin,password: pin}
+          userdb.insertOne(newUser)
+          online = uin;
+          console.log("new user created")
+          response.redirect("/");
+      }
+    })
+  }
+  catch(e){
+    console.log(e)
+  }
+
+})
 app.get("/login", (request,response)=>{
   response.render("login.html");
 })
 
-app.post('/login', function(req, res){
-  console.log(req.body)
-  if(!req.body.id || !req.body.password){
-    res.status("400");
-    res.send("Invalid details!");
-  } else {
-    console.log("made it")
-
-    var newUser = {id: req.body.id, password: req.body.password};
-
-    userdb.findOne({id: req.body.id }, function(err, result){
-      if(!result){ // if user does not exist, register a new user
-        userdb.insertOne(newUser)
-        window.alert("user registered")
-      }
-      else{
-        userdb.findOne({id: req.body.id, password: req.body.password }, function(err, result){
-          if(!result) {
-            res.status("400");
-            res.send("Invalid Password!");
-          }
-        })
-      }
-    })
-    req.session.user = newUser;
-    online = req.session.user.id;
-    res.redirect('/');
-  }
-});
 
 // listen for requests :)
 app.listen(3000);
