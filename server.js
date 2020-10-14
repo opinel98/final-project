@@ -14,6 +14,13 @@ app.use(cookieParser());
 app.use(session({secret: "Your secret key"}));
 
 
+// info plug ins for password hashing
+const saltRounds = 10;
+const bcrypt = require('bcrypt');
+
+
+
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.engine('html', require('ejs').renderFile);
@@ -57,25 +64,33 @@ app.post("/login" ,async(request,response) => {
     userdb.count({id: uin}).then(r =>{
       if(r > 0) {
         console.log(r)
-        userdb.find({id: uin, password: pin}).toArray().then(res => {
+        userdb.find({id: uin}).toArray().then(res => {
           if (res[0]) {
-            console.log("Autenticated")
-            response.redirect("/");
-            online = uin;
-
-          } else {
-            let m = "Fail"
-            console.log(m)
-            response.redirect("/login");
+            bcrypt.compare(pin,res[0].password, function(err, c) {
+              if (c === true) {
+                console.log("Autenticated")
+                online = uin;
+                response.redirect("/");
+              }
+              else {
+                let m = "Fail"
+                console.log(m)
+                response.redirect("/login");
+              }
+            })
           }
         })
       }
       else{
-          let newUser = {id: uin,password: pin}
+        let newUser = null;
+        bcrypt.hash(pin, saltRounds, (err, hash) => {
+          console.log(hash);
+          newUser = {id: uin,password: hash}
           userdb.insertOne(newUser)
           online = uin;
           console.log("new user created")
           response.redirect("/");
+        });
       }
     })
   }
