@@ -1,8 +1,12 @@
 {
   "name": "final-project",
   "version": "1.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
   "devDependencies": {
-    "mongodb": "^3.6.2"
+    "mongodb": "^3.6.2",
+    "ejs": "^3.1.5"
   }
 }
