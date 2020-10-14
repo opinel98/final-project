@@ -1,8 +1,4 @@
-
-
 var ctx = null;
-
-
 
 var gameTime = 0, lastFrameTime = 0;
 var currentSecond = 0, frameCount = 0, framesLastSecond = 0;
@@ -17,12 +13,35 @@ var mouseState = {
 };
 var gameState = {
     difficulty	: 'easy',
-    screen		: 'menu',
+    mode        : 'single',
+    type        : 'create',
+    screen		: 'modes',
     newBest		: false,
     timeTaken	: 0,
 
     tileW		: 20,
     tileH		: 20
+};
+var modes = {
+    singlePlayer  : {
+        name : "Single",
+        menuBox		: [0,0]
+    },
+    multiPlayer : {
+        name : "Multiplayer",
+        type : "Create",
+        menuBox		: [0,0]
+    }
+};
+var types = {
+    create : {
+        name : 'Create',
+        menuBox		: [0,0]
+    },
+    join : {
+        name : 'Join',
+        menuBox		: [0,0]
+    }
 };
 var difficulties = {
     easy	: {
@@ -209,7 +228,72 @@ function startLevel(diff)
 
 function updateGame()
 {
-    if(gameState.screen=='menu')
+    if(gameState.screen=='modes'){
+        if(mouseState.click!=null){
+            for(var i in modes){
+                if(mouseState.y >= modes[i].menuBox[0] &&
+                    mouseState.y <= modes[i].menuBox[1])
+                {
+                    if(modes[i].name == 'Single'){
+                        gameState.screen = 'menu';
+                        gameState.mode = 'Single';
+                        mouseState.click = null;
+                    }
+                    else if(modes[i].name == 'Multiplayer'){
+                        gameState.screen = 'types';
+                        gameState.mode = 'Multiplayer';
+                        mouseState.click = null;
+                    }
+                }
+            }
+        }
+    }
+    else if(gameState.screen=='types'){
+        if(mouseState.click!=null){
+            for(var i in types){
+                if(mouseState.y >= types[i].menuBox[0] &&
+                    mouseState.y <= types[i].menuBox[1]){
+                    if(types[i].name == 'Join'){
+                        gameState.screen = 'input';
+                        mouseState.click = null;
+                    }
+                    else if (types[i].name == 'Create') {
+                        gameState.screen = 'menu';
+                        mouseState.click = null;
+                    }
+                }
+                else if(mouseState.y >= 380)
+                {
+                    gameState.screen = 'modes';
+                    mouseState.click = null;
+                }
+            }
+        }
+    }
+    else if(gameState.screen=='input'){
+        if(mouseState.click!=null){
+            if(mouseState.y >= 380)
+            {
+                gameState.screen = 'types';
+                mouseState.click = null;
+            }
+        }
+    }
+    else if(gameState.screen=='code'){
+        if(mouseState.click!=null){
+            if(mouseState.y >= 130 &&
+                mouseState.y <= 160){
+                startLevel(gameState.difficulty);
+                mouseState.click = null;
+            }
+            else if(mouseState.y >= 380)
+            {
+                gameState.screen = 'types';
+                mouseState.click = null;
+            }
+        }
+    }
+    else if(gameState.screen=='menu')
     {
         if(mouseState.click!=null)
         {
@@ -218,8 +302,22 @@ function updateGame()
                 if(mouseState.y >= difficulties[i].menuBox[0] &&
                     mouseState.y <= difficulties[i].menuBox[1])
                 {
-                    startLevel(i);
-                    break;
+                    if(gameState.mode == 'Single'){
+                        startLevel(i);
+                        break;
+                    }
+                    else if(gameState.mode == 'Multiplayer'){
+                        gameState.screen = 'code';
+                    }
+                }
+            }
+            if(mouseState.y >= 380)
+            {
+                if(gameState.mode == 'Single'){
+                    gameState.screen = 'modes';
+                }
+                else if(gameState.mode == 'Multiplayer'){
+                    gameState.screen = 'types';
                 }
             }
             mouseState.click = null;
@@ -258,15 +356,15 @@ function updateGame()
                     grid[((tile[1] * cDiff.width) + tile[0])].flag();
                 }
             }
-            else if(mouseState.click[1]>=380)
+            /*else if(mouseState.click[1]>=380)
             {
                 gameState.screen = 'menu';
-            }
+            }*/
 
             mouseState.click = null;
         }
     }
-}
+};
 
 window.onload = function()
 {
@@ -295,11 +393,82 @@ window.onload = function()
     requestAnimationFrame(drawGame);
 };
 
+function drawGameMode(){
+    ctx.textAlign = 'center';
+    ctx.font = "bold 20pt sans-serif";
+    ctx.fillStyle = "#000000";
+
+    var y = 150;
+
+    for(var d in modes){
+        var mouseOver = (mouseState.y>=(y-20) && mouseState.y<=(y+10));
+
+        if(mouseOver) { ctx.fillStyle = "#000099"; }
+
+        modes[d].menuBox = [y-20, y+10]
+        ctx.fillText(modes[d].name, 150, y);
+        y+= 80;
+
+        if(mouseOver) { ctx.fillStyle = "#000000"; }
+    }
+};
+
+function drawGameType(){
+    ctx.textAlign = 'center';
+    ctx.font = "bold 20pt sans-serif";
+    ctx.fillStyle = "#000000";
+
+    var y = 150;
+
+    for(var d in types){
+        var mouseOver = (mouseState.y>=(y-20) && mouseState.y<=(y+10));
+
+        if(mouseOver) { ctx.fillStyle = "#000099"; }
+
+        types[d].menuBox = [y-20, y+10]
+        ctx.fillText(types[d].name, 150, y);
+        y+= 80;
+
+        if(mouseOver) { ctx.fillStyle = "#000000"; }
+    }
+
+    ctx.fillText("Return", 150, 390);
+};
+
+function drawCodeInput(){
+    ctx.textAlign = 'center';
+    ctx.font = "bold 20pt sans-serif";
+    ctx.fillStyle = "#000000";
+
+    var y = 150;
+
+    ctx.fillText("Input game code:", 150, 150);
+    ctx.fillText("CODE", 150, 230);
+
+    ctx.fillText("Return", 150, 390);
+};
+
+function drawCodeGen(){
+    ctx.textAlign = 'center';
+    ctx.font = "bold 20pt sans-serif";
+    ctx.fillStyle = "#000000";
+
+    var y = 150;
+
+    ctx.fillText("Code:", 150, 150);
+    ctx.fillText("CODE", 150, 230);
+
+    ctx.fillText("Return", 150, 390);
+
+};
+
 function drawMenu()
 {
     ctx.textAlign = 'center';
     ctx.font = "bold 20pt sans-serif";
     ctx.fillStyle = "#000000";
+
+    ctx.fillText("Return", 150, 390);
 
     var y = 100;
 
@@ -355,8 +524,6 @@ function drawPlaying()
     ctx.fillStyle = "#000000";
     ctx.font = "12px sans-serif";
     ctx.fillText(cDiff.name, 150, 20);
-
-    ctx.fillText("Return to menu", 150, 390);
 
     if(gameState.screen!='lost')
     {
@@ -462,7 +629,11 @@ function drawGame()
     ctx.fillStyle = "#ddddee";
     ctx.fillRect(0, 0, 300, 400);
 
-    if(gameState.screen=='menu') { drawMenu(); }
+    if(gameState.screen == 'modes'){ drawGameMode(); }
+    else if(gameState.screen == 'types'){ drawGameType(); }
+    else if(gameState.screen == 'input'){ drawCodeInput(); }
+    else if(gameState.screen == 'code'){ drawCodeGen(); }
+    else if(gameState.screen=='menu') { drawMenu(); }
     else { drawPlaying(); }
 
     // Draw the frame count
