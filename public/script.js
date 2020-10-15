@@ -1,41 +1,38 @@
 
-// run by the browser each time the page is loaded
+function clearTable(){
+    var table = document.getElementById("table1");
+    for(var i = table.rows.length - 1; i > 0; i--){
+        table.deleteRow(i);
+    }
+};
 
-console.log("hello world :o");
+function addEntryToTable(json){
+    var row = document.getElementById("table1").insertRow(1);
 
-// define variables that reference elements on our page
-const dreamsList = document.getElementById("dreams");
-const dreamsForm = document.querySelector("form");
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
 
-// a helper function that creates a list item for a given dream
-function appendNewDream(dream) {
-  const newListItem = document.createElement("li");
-  newListItem.innerText = dream;
-  dreamsList.appendChild(newListItem);
-}
+    cell1.innerHTML = json.user;
+    cell2.innerHTML = json.difficulty;
+    cell3.innerHTML = json.time;
+    cell4.innerHTML = json.date;
+};
 
-// fetch the initial list of dreams
-fetch("/dreams")
-  .then(response => response.json()) // parse the JSON from the server
-  .then(dreams => {
-    // remove the loading text
-    dreamsList.firstElementChild.remove();
-  
-    // iterate through every dream and add it to our page
-    dreams.forEach(appendNewDream);
-  
-    // listen for the form to be submitted and add a new dream when it is
-    dreamsForm.addEventListener("submit", event => {
-      // stop our form submission from refreshing the page
-      event.preventDefault();
+fetch("/load")
+    .then(response => response.json())
+    .then(entries => {
+        console.log(entries);
+        clearTable();
+        entries = entries.sort((a,b) => parseFloat(b.time) - parseFloat(a.time))
+        var i = 0;
+        entries.forEach(e => {
+                if (i < 10) {
+                    addEntryToTable(e);
+                    i++;
+                }
+            }
+            );
+    })
 
-      // get dream value and add it to the list
-      let newDream = dreamsForm.elements.dream.value;
-      dreams.push(newDream);
-      appendNewDream(newDream);
-
-      // reset form
-      dreamsForm.reset();
-      dreamsForm.elements.dream.focus();
-    });
-  });
