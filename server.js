@@ -85,25 +85,46 @@ app.get("/game", (request, response) => {
 
 // all the routes for the sidebar
 app.get("/chat", (request, response) => {
+  if(request.session.uid) {
   response.render('menu/Chat.html')
+}
+else{
+  response.redirect("/");
+}
 });
 
 app.get("/home", (request, response) => {
+  if(request.session.uid) {
   response.redirect("/game")
+  }
+  else{
+    response.redirect("/");
+  }
 });
 
 app.get("/globalBoard", (request, response) => {
+  if(request.session.uid) {
   response.render('menu/global_leaderboard.html')
+  }
+  else{
+    response.redirect("/");
+  }
 });
 
 app.get("/playGame", (request, response) => {
-  response.render('game.html')
+ if(request.session.uid) {
+   response.render('game.html')
+ }
+ else{
+   response.redirect("/");
+ }
 });
 
-
-
-
-
+app.get("/logout", (request, response) => {
+  request.session.destroy();
+  response.redirect("/")
+});
+//****************************** side bar routes******************
 app.get("/", (request, response) => {
   console.log("in login")
   response.render("login.html");

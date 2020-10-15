@@ -15,23 +15,31 @@
     <a href="Chat">Chat</a>
     <a href="globalBoard">Global Leaderboard</a>
     <a href="playGame">Play game</a>
+    <a href="logout">Logout</a>
     <a href="javascript:void(0);" class="icon" onclick="myFunction()">
         <i class="fa fa-bars"></i>
     </a>
 </div>
-</div>
 <h2 id="welcome"></h2>
-<script>
-    let id = null;
-    window.onload = function (e) {
-        e.preventDefault();
-        fetch('/getUser', {
-            method: 'GET'
-        }).then(response => response.json()).then(data => {
-            id = data.id;
-            document.getElementById('welcome').innerText = 'Hi ' + id + ', welcome back!'
-        })
-    }
-</script>
+<table id="table1" style="width:100%">
+    <tr>
+        <th>User Name</th>
+        <th>Difficulty</th>
+        <th>Time</th>
+        <th>Date</th>
+    </tr>
+
+    <script>
+        let id = null;
+        window.onload = function (e) {
+            e.preventDefault();
+            fetch('/getUser', {
+                method: 'GET'
+            }).then(response => response.json()).then(data => {
+                id = data.id;
+                document.getElementById('welcome').innerText = 'Hi ' + id + ', welcome back!'
+            })
+        }
+    </script>
 </body>
 </html>
