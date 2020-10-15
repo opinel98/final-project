@@ -166,6 +166,28 @@ function checkState()
     gameState.timeTaken = gameTime;
     var cDiff = difficulties[gameState.difficulty];
 
+    console.log(gameState.difficulty);
+    console.log(gameState.timeTaken / 1000);
+
+    let results = {
+        difficulty : gameState.difficulty,
+        time       : gameState.timeTaken / 1000,
+    }
+
+    let body = JSON.stringify(results);
+
+    fetch('/insertGame',{
+        method: 'POST',
+        body,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response =>{
+            console.log("orlo es mk")
+        })
+
+
     if(cDiff.bestTime==0 ||
         gameTime < cDiff.bestTime)
     {
