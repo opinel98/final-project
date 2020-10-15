@@ -81,6 +81,29 @@ app.get("/game", (request, response) => {
 
 });
 
+
+
+// all the routes for the sidebar
+app.get("/chat", (request, response) => {
+  response.render('menu/Chat.html')
+});
+
+app.get("/home", (request, response) => {
+  response.redirect("/game")
+});
+
+app.get("/globalBoard", (request, response) => {
+  response.render('menu/global_leaderboard.html')
+});
+
+app.get("/playGame", (request, response) => {
+  response.render('game.html')
+});
+
+
+
+
+
 app.get("/", (request, response) => {
   console.log("in login")
   response.render("login.html");
