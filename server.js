@@ -11,6 +11,7 @@ var socket = require('socket.io');
 const server = require('http').Server(app);
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser')
+var date = require('date-fns');
 var session = require('express-session');
 var cookieParser = require('cookie-parser')
 
@@ -35,6 +36,7 @@ app.set('views',__dirname + '/views');
 
 let online = null;
 let userdb = null;
+let gamedb = null;
 
 online = "Joe";
 
@@ -43,6 +45,7 @@ const uri = "mongodb+srv://dbUser:dbPassword@cluster0.ui701.mongodb.net/<dbname>
 const client = new MongoClient(uri, { useNewUrlParser: true });
 client.connect(err => {
   userdb = client.db("a3").collection("users");
+  gamedb = client.db("a3").collection("games");
   // perform actions on the collection object
 });
 
@@ -158,9 +161,24 @@ app.post("/loginAttempt" ,async(request,response) => {
   }
 })
 
+
 app.get('/getUser', (req, res) => {
   res.json({id: req.session.uid});
 })
+
+app.post('/insertGame', (res, req) =>{
+  var completedGame = {
+    user : req.session.uid,
+    difficulty: req.body.difficulty,
+    time: req.body.time,
+    date: date.format(new Date(), "yyyy-MM-dd")
+  }
+
+  gamedb.insertOne(completedGame)
+  res.end()
+
+})
+
 
 // listen for requests :)
 server.listen(3000,() => {
