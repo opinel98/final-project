@@ -28,7 +28,7 @@ const bcrypt = require('bcrypt');
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(bodyParser.json())
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.set('views',__dirname + '/views');
@@ -53,11 +53,9 @@ client.connect(err => {
 app.use(express.static("public"));
 
 // https://expressjs.com/en/starter/basic-routing.html
-app.get("/", (request, response) => {
-  response.sendFile(__dirname + "/views/player_lobby.html");
-});
-
-
+// app.get("/", (request, response) => {
+//   response.sendFile(__dirname + "/views/player_lobby.html");
+// });
 
 // set up socket io for the chat room
 let io = socket.listen(server);
@@ -74,15 +72,21 @@ io.on('connection', (socket) => {
 io.on('connection', (socket) => {
   socket.on('chat message', (msg) => {
     io.emit('chat message', msg);
-  });
+  })
+});
+
+app.get("/game", (request, response) => {
+  console.log('in game')
+  response.render('player_lobby.html')
+
 });
 
 app.get("/", (request, response) => {
   console.log("in login")
-  response.redirect("/login")
+  response.render("login.html");
 });
 
-app.post("/login" ,async(request,response) => {
+app.post("/loginAttempt" ,async(request,response) => {
   try{
     let uin = request.body.id;
     let pin = request.body.password;
@@ -96,14 +100,18 @@ app.post("/login" ,async(request,response) => {
           if (res[0]) {
             bcrypt.compare(pin,res[0].password, function(err, c) {
               if (c === true) {
-                console.log("Autenticated")
+                console.log("Authenticated")
                 online = uin;
-                response.redirect("/");
+                request.session.uid = uin;
+                // response.redirect("/");
+                response.send(JSON.stringify({id: request.session.uid}))
               }
               else {
                 let m = "Fail"
                 console.log(m)
-                response.redirect("/login");
+                response.send('Didnt work')
+
+                // response.redirect("/login");
               }
             })
           }
@@ -117,7 +125,7 @@ app.post("/login" ,async(request,response) => {
           userdb.insertOne(newUser)
           online = uin;
           console.log("new user created")
-          response.redirect("/");
+          response.redirect("/game");
         });
       }
     })
@@ -126,14 +134,10 @@ app.post("/login" ,async(request,response) => {
     console.log(e)
   }
 })
-app.get("/login", (request,response)=>{
-  response.render("login.html");
+
+app.get('/getUser', (req, res) => {
+  res.json({id: req.session.uid});
 })
-
-
-
-
-
 
 // listen for requests :)
 server.listen(3000,() => {
