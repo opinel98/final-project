@@ -166,9 +166,6 @@ function checkState()
     gameState.timeTaken = gameTime;
     var cDiff = difficulties[gameState.difficulty];
 
-    console.log(gameState.difficulty);
-    console.log(gameState.timeTaken / 1000);
-
     let results = {
         difficulty : gameState.difficulty,
         time       : gameState.timeTaken / 1000,
@@ -184,7 +181,6 @@ function checkState()
         }
     })
         .then(response =>{
-            console.log("orlo es mk")
         })
 
 
