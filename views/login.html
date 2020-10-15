@@ -3,12 +3,13 @@
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.3/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../public/retro.css">
+    <link rel="stylesheet" href="/retro.css">
     <style>
-        h2 {
+        h1, h2 {
             display: flex;
             align-content: center;
             justify-content: center;
+            color: white;
         }
         body {font-family: Arial, Helvetica, sans-serif;}
         form {
@@ -19,6 +20,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background-color: #808080;
         }
 
         input[type=text], input[type=password] {
@@ -31,19 +33,22 @@
         }
 
         button {
-            background-color: #4CAF50;
             color: white;
             padding: 14px 20px;
             margin: 8px 0;
             border: none;
             cursor: pointer;
             width: 100%;
+            font-weight: bold;
         }
 
         button:hover {
             opacity: 0.8;
         }
 
+        label{
+            color: white;
+        }
 
         .imgcontainer {
             text-align: center;
@@ -64,7 +69,7 @@
 </head>
 <body>
 
-<h2>Mine Sweeper Online</h2>
+<h1>Mine Sweeper Online</h1>
 
 <form>
     <div class="imgcontainer">
