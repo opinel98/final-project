@@ -188,6 +188,16 @@ app.post("/loginAttempt" ,async(request,response) => {
   }
 })
 
+app.get("/load", (request, response) => {
+  if( gamedb !== null ) {
+    // get array and pass to res.json
+
+    gamedb.find().toArray().then( result => {
+      response.json(result)
+    })
+  }
+  //response.json(JSON.stringify(data));
+});
 
 app.get('/getUser', (req, res) => {
   res.json({id: req.session.uid});
