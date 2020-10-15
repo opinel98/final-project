@@ -167,6 +167,8 @@ app.get('/getUser', (req, res) => {
 })
 
 app.post('/insertGame', (res, req) =>{
+  console.log(res.body)
+
   var completedGame = {
     user : req.session.uid,
     difficulty: req.body.difficulty,
