@@ -16,7 +16,6 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser')
 
 
-
 app.use(cookieParser());
 app.use(session({secret: "Your secret key"}));
 
@@ -24,9 +23,6 @@ app.use(session({secret: "Your secret key"}));
 // info plug ins for password hashing
 const saltRounds = 10;
 const bcrypt = require('bcrypt');
-
-
-
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
@@ -48,7 +44,6 @@ client.connect(err => {
   gamedb = client.db("a3").collection("games");
   // perform actions on the collection object
 });
-
 
 
 // make all the files in 'public' available
@@ -83,6 +78,17 @@ app.get("/game", (request, response) => {
   response.render('player_lobby.html')
 
 });
+
+// route for getting user data
+app.get("/getUserData", (request, response) => {
+  if( gamedb !== null ) {
+    // get array and pass to res.json
+    gamedb.find({user:request.session.uid }).toArray().then( result => {
+      response.json(result)})
+  }
+});
+
+
 
 
 
@@ -202,8 +208,8 @@ app.post('/insertGame', (req, res) =>{
 
 })
 
-
 // listen for requests :)
 server.listen(3000,() => {
   console.log('listening on *:3000');
 });
+
