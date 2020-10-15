@@ -19,13 +19,32 @@
         <i class="fa fa-bars"></i>
     </a>
 </div>
-<h2>Hi <%= online%>, welcome back</h2>
+<h2 id="welcome">Hi , welcome back!</h2>
+<div>
+    <ul id="messages"></ul>
+    <form onsubmit="return sendMessage(e)">
+        <input id="m" autocomplete="off" />
+        <button type="button">Send</button>
+    </form>
+</div>
+</body>
 <script>
+    let id = null;
+    window.onload = function (e) {
+        e.preventDefault();
+        fetch('/getUser', {
+            method: 'GET'
+        }).then(response => response.json()).then(data => {
+            id = data.id;
+            document.getElementById('welcome').innerText = 'Hi ' + id + ', welcome back!'
+        })
+    }
+
     $(function () {
         var socket = io();
         $('form').submit(function(e){
             e.preventDefault(); // prevents page reloading
-            socket.emit('chat message', $('#m').val());
+            socket.emit('chat message', id + ': ' + $('#m').val());
             $('#m').val('');
             return false;
         });
@@ -34,11 +53,4 @@
         });
     });
 </script>
-<div>
-    <ul id="messages"></ul>
-    <form action="">
-        <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
-</div>
-</body>
 </html>
