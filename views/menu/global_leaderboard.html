@@ -11,6 +11,22 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <style>
+        button {
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 15%;
+            font-weight: bold;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
 <div class="topnav" id="myTopnav">
@@ -23,7 +39,9 @@
         <i class="fa fa-bars"></i>
     </a>
 </div>
-<h2 id="welcome"></h2>
+<h2>Top 10 Games!</h2>
+<button style="float: right" onClick="window.location.reload();">Update</button>
+
 <table id="table1" style="width:100%">
     <tr>
         <th>User Name</th>
@@ -31,18 +49,6 @@
         <th>Time</th>
         <th>Date</th>
     </tr>
-
-    <script>
-        let id = null;
-        window.onload = function (e) {
-            e.preventDefault();
-            fetch('/getUser', {
-                method: 'GET'
-            }).then(response => response.json()).then(data => {
-                id = data.id;
-                document.getElementById('welcome').innerText = 'Hi ' + id + ', welcome back!'
-            })
-        }
-    </script>
+</table>
 </body>
 </html>
