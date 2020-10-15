@@ -166,7 +166,7 @@ app.get('/getUser', (req, res) => {
   res.json({id: req.session.uid});
 })
 
-app.post('/insertGame', (res, req) =>{
+app.post('/insertGame', (req, res) =>{
   console.log(res.body)
 
   var completedGame = {
