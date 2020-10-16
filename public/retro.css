@@ -26,4 +26,29 @@ th, td {
     text-align: left;
 }
 
+.grid-container {
+    column-count: 3;
+}
+
+#easy, #easyN {
+    font-family: sans-serif;
+    color: forestgreen;
+    font-weight: bolder;
+}
+#medium, #mediumN {
+    font-family: sans-serif;
+    color: orangered;
+    font-weight: bolder;
+}
+
+#hard, #hardN {
+    font-family: sans-serif;
+    color: crimson;
+    font-weight: bolder;
+}
+
+.grid-item{
+    text-align: center;
+}
+
 tr:nth-child(even) {background-color: #f2f2f2;}

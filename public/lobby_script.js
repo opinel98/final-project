@@ -10,7 +10,9 @@ window.onload = function (e) {
     }).then(response => response.json()).then(data => {
         u = data.id;
 
-        document.getElementById('welcome').innerText = 'Hi ' + u + ', welcome back!'
+        document.getElementById('welcome')
+            .innerText = 'Hi ' + u + ', Welcome back!\nStats: '
+        //document.getElementById("welcome").innerText = 'Stats: '
 
     })
 }
@@ -29,16 +31,19 @@ function getWins(){
            if(c.difficulty === "easy"){
                easyCount++;
            }
-           else if(c.difficulty === "hard") {
-               hardCount++;
-           }
-           else {
+           else if(c.difficulty === "medium") {
                mediumCount++;
            }
+           else {
+               hardCount++;
+           }
        })
-        document.getElementById('easy').innerText = 'You won ' + easyCount + ' easy games'
-        document.getElementById('medium').innerText = 'You won ' + mediumCount + ' medium games'
-        document.getElementById('hard').innerText = 'You won ' + hardCount + ' hard games'
+        document.getElementById('easyN').innerText = easyCount
+        document.getElementById('easy').innerText = ' Easy games won'
+        document.getElementById('mediumN').innerText = mediumCount
+        document.getElementById('medium').innerText = ' Medium games won'
+        document.getElementById('hardN').innerText = hardCount
+        document.getElementById('hard').innerText = ' Hard games won'
     });
 }
 
