@@ -39,3 +39,6 @@ Luckyly we were all together and thus we managed to meet regularly and work toge
     Application design and flow
 
 ### Video
+
+### Acknowledgements
++ The algorithm to generate the grid with mines and the gameflow was based off an online project from: https://www.youtube.com/watch?v=tSAaVG7a16E&feature=youtu.be
