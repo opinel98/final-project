@@ -20,13 +20,16 @@
         <i class="fa fa-bars"></i>
     </a>
 </div>
-<div>
+  
+  <div id ="md">
     <ul id="messages"></ul>
-    <form onsubmit="return sendMessage(e)">
+  </div>
+  <div>
+    <form>
         <input id="m" autocomplete="off" />
-        <button type="button">Send</button>
+        <button type="button">Press Enter</button>
     </form>
-</div>
+    </div>
 </body>
 <script>
     let id = null;
@@ -52,7 +55,9 @@
         });
         socket.on('chat message', function(msg){
             $('#messages').append($('<li>').text(msg));
+          
         });
     });
 </script>
+<script type ="text/javascript"> >>$(document).ready(function (){ >> var $scroll_down_chat = $('#message_board');</script>
 </html>

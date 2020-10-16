@@ -11,7 +11,7 @@ window.onload = function (e) {
         u = data.id;
 
         document.getElementById('welcome')
-            .innerText = 'Hi ' + u + ', Welcome back!\nStats: '
+            .innerText = 'Hi ' + u + ', Welcome back!\n'
         //document.getElementById("welcome").innerText = 'Stats: '
 
     })
