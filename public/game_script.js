@@ -670,3 +670,12 @@ function realPos(x, y)
 
     return [x, y];
 }
+
+function exit() {
+    fetch('/exitCanvas')
+        .then(response => {
+            window.alert("this is bullshit")
+        })
+}
+
+

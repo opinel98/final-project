@@ -88,9 +88,6 @@ app.get("/getUserData", (request, response) => {
 });
 
 
-
-
-
 // all the routes for the sidebar
 app.get("/chat", (request, response) => {
   if(request.session.uid) {
@@ -135,7 +132,7 @@ app.get("/logout", (request, response) => {
 //****************************** side bar routes******************
 app.get("/exitCanvas", (request, response) => {
  console.log(" in exit canva");
-  response.redirect("/home")
+  response.redirect("/game")
 });
 app.get("/", (request, response) => {
   console.log("in login")
