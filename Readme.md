@@ -1,7 +1,7 @@
 Final Project 
 
 # Final Project - Minesweeper Team 5
-live app:https://minesweeper-final-project-wpi.glitch.me/
+Live app: https://minesweeper-final-project-wpi.glitch.me/
 
 ### Instructions
 When entering the website you are prompted to login, if you don't yet have an account 
@@ -13,15 +13,14 @@ your new profile.
 - Mongodb database, non relational db to store user and game data.
 - Bootstrap CSS framework and design 
 - Bycrpt for password hashing increased security
-- Date-fns for data formatting 
+- Date-fns for date formatting 
 - Express-session for keeping user data across view
 - Socket IO for live chat communication
 
 
 ### Challenges
-+ The biggest challenge we faced, was setting up the session to pass around the logged in user information, this necesary for storing user specific data about the games. 
++ The biggest challenge we faced, was setting up the session to pass around the logged in user information, this is necesary for storing user specific data about the games. 
 + We first started by working on a localhost web app, and the trasntion between localhost and glitch gave us a lot of trouble specifically with socket io and the live chat. 
-+
 
 ### Responsibilities
 Luckyly we were all together and thus we managed to meet regularly and work together in all the components. However, each member was the owner of the following features:
@@ -30,7 +29,7 @@ Luckyly we were all together and thus we managed to meet regularly and work toge
     Express sessions 
     Application design and flow
 + Isabel Morales: 
-    Git flow (merge);
+    Git flow (merge)
     Login and authentication
     Database management 
     Application design and flow
