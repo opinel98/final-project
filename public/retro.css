@@ -14,6 +14,7 @@ button{
     display: block;
 }
 
+
 input{
     border-radius: 10px;
 
@@ -59,3 +60,12 @@ th, td {
 }
 
 tr:nth-child(even) {background-color: #f2f2f2;}
+
+#gameTitle{
+    color: #E7B70F;
+    text-align: center;
+    alignment: center;
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+}
