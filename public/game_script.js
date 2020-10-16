@@ -15,13 +15,13 @@ var gameState = {
     difficulty	: 'easy',
     mode        : 'single',
     type        : 'create',
-    screen		: 'modes',
+    screen		: 'menu',
     newBest		: false,
     timeTaken	: 0,
 
     tileW		: 20,
     tileH		: 20
-};
+};/*
 var modes = {
     singlePlayer  : {
         name : "Single",
@@ -42,7 +42,7 @@ var types = {
         name : 'Join',
         menuBox		: [0,0]
     }
-};
+};*/
 var difficulties = {
     easy	: {
         name		: "Easy",
@@ -245,7 +245,7 @@ function startLevel(diff)
 }
 
 function updateGame()
-{
+{/*
     if(gameState.screen=='modes'){
         if(mouseState.click!=null){
             for(var i in modes){
@@ -311,7 +311,7 @@ function updateGame()
             }
         }
     }
-    else if(gameState.screen=='menu')
+    else */if(gameState.screen=='menu')
     {
         if(mouseState.click!=null)
         {
@@ -320,24 +320,14 @@ function updateGame()
                 if(mouseState.y >= difficulties[i].menuBox[0] &&
                     mouseState.y <= difficulties[i].menuBox[1])
                 {
-                    if(gameState.mode == 'Single'){
-                        startLevel(i);
-                        break;
-                    }
-                    else if(gameState.mode == 'Multiplayer'){
-                        gameState.screen = 'code';
-                    }
+                    startLevel(i);
+                    break;
                 }
             }
-            if(mouseState.y >= 380)
+            /*if(mouseState.y >= 380)
             {
-                if(gameState.mode == 'Single'){
-                    gameState.screen = 'modes';
-                }
-                else if(gameState.mode == 'Multiplayer'){
-                    gameState.screen = 'types';
-                }
-            }
+
+            }*/
             mouseState.click = null;
         }
     }
@@ -410,7 +400,7 @@ window.onload = function()
 
     requestAnimationFrame(drawGame);
 };
-
+/*
 function drawGameMode(){
     ctx.textAlign = 'center';
     ctx.font = "bold 20pt sans-serif";
@@ -479,14 +469,14 @@ function drawCodeGen(){
     ctx.fillText("Return", 150, 390);
 
 };
-
+*/
 function drawMenu()
 {
     ctx.textAlign = 'center';
     ctx.font = "bold 20pt sans-serif";
     ctx.fillStyle = "#000000";
 
-    ctx.fillText("Return", 150, 390);
+    //ctx.fillText("Return", 150, 390);
 
     var y = 100;
 
@@ -646,12 +636,12 @@ function drawGame()
     // Clear canvas
     ctx.fillStyle = "#ddddee";
     ctx.fillRect(0, 0, 300, 400);
-
+/*
     if(gameState.screen == 'modes'){ drawGameMode(); }
     else if(gameState.screen == 'types'){ drawGameType(); }
     else if(gameState.screen == 'input'){ drawCodeInput(); }
     else if(gameState.screen == 'code'){ drawCodeGen(); }
-    else if(gameState.screen=='menu') { drawMenu(); }
+    else */if(gameState.screen=='menu') { drawMenu(); }
     else { drawPlaying(); }
 
     // Draw the frame count
