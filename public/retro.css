@@ -7,6 +7,13 @@ button{
     border-radius: 10px;
 }
 
+#exitGame{
+    alignment: right;
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+}
+
 input{
     border-radius: 10px;
 

@@ -49,6 +49,18 @@
         <th>Time</th>
         <th>Date</th>
     </tr>
+    <script>
+        let id = null;
+        window.onload = function (e) {
+            e.preventDefault();
+            fetch('/getUser', {
+                method: 'GET'
+            }).then(response => response.json()).then(data => {
+                id = data.id;
+                document.getElementById('welcome').innerText = 'Top 10 Player times'
+            })
+        }
+    </script>
 </table>
 </body>
 </html>

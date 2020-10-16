@@ -76,7 +76,6 @@ io.on('connection', (socket) => {
 app.get("/game", (request, response) => {
   console.log('in game')
   response.render('player_lobby.html')
-
 });
 
 // route for getting user data
@@ -87,9 +86,6 @@ app.get("/getUserData", (request, response) => {
       response.json(result)})
   }
 });
-
-
-
 
 
 // all the routes for the sidebar
@@ -134,6 +130,7 @@ app.get("/logout", (request, response) => {
   response.redirect("/")
 });
 //****************************** side bar routes******************
+
 app.get("/", (request, response) => {
   console.log("in login")
   response.render("login.html");
