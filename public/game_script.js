@@ -672,10 +672,8 @@ function realPos(x, y)
 }
 
 function exit() {
-    fetch('/exitCanvas')
-        .then(response => {
-            window.alert("this is bullshit")
-        })
+
+    window.location.replace('/home')
 }
 
 

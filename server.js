@@ -130,10 +130,7 @@ app.get("/logout", (request, response) => {
   response.redirect("/")
 });
 //****************************** side bar routes******************
-app.get("/exitCanvas", (request, response) => {
- console.log(" in exit canva");
-  response.redirect("/game")
-});
+
 app.get("/", (request, response) => {
   console.log("in login")
   response.render("login.html");
