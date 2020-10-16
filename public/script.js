@@ -7,7 +7,7 @@ function clearTable(){
 };
 
 function addEntryToTable(json){
-    var row = document.getElementById("table1").insertRow(1);
+    var row = document.getElementById("table1").insertRow();
 
     var cell1 = row.insertCell(0);
     var cell2 = row.insertCell(1);
@@ -20,12 +20,12 @@ function addEntryToTable(json){
     cell4.innerHTML = json.date;
 };
 
+window.onload = function (){ 
 fetch("/load")
     .then(response => response.json())
-    .then(entries => {
-        console.log(entries);
+    .then(entries => {    
         clearTable();
-        entries = entries.sort((a,b) => parseFloat(b.time) - parseFloat(a.time))
+        entries = entries.sort((a,b) => parseFloat(a.time) - parseFloat(b.time))
         var i = 0;
         entries.forEach(e => {
                 if (i < 10) {
@@ -33,6 +33,7 @@ fetch("/load")
                     i++;
                 }
             }
-            );
+           );
     })
+}
 
